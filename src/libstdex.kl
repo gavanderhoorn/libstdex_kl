@@ -1,0 +1,186 @@
+
+-- Copyright (c) 2016, G.A. vd. Hoorn
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--     http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
+
+PROGRAM libstdex
+--------------------------------------------------------------------------------
+--
+-- libstdex implementation
+--
+-- author: G.A. vd. Hoorn
+--
+--------------------------------------------------------------------------------
+%ALPHABETIZE
+%COMMENT = 'r0'
+%NOLOCKGROUP
+%NOPAUSE = COMMAND + TPENABLE + ERROR
+
+
+
+
+--------------------------------------------------------------------------------
+--
+-- local types & constants
+--
+--------------------------------------------------------------------------------
+
+
+
+
+--------------------------------------------------------------------------------
+--
+-- remote routine prototypes
+--
+--------------------------------------------------------------------------------
+
+
+
+
+--------------------------------------------------------------------------------
+--
+-- local routine prototypes
+--
+--------------------------------------------------------------------------------
+%INCLUDE stdex\stdex.klh
+
+
+
+
+--------------------------------------------------------------------------------
+--
+-- Empty body
+--
+--------------------------------------------------------------------------------
+BEGIN
+END libstdex
+
+
+
+
+ROUTINE rem_bytes
+CONST
+	CHUNK_SZ     = 127
+VAR
+	stat__       : INTEGER
+	count__      : INTEGER
+	read__       : INTEGER
+	to_read__    : INTEGER
+	buf__        : STRING[128]
+BEGIN
+	stat__       = 0
+	count__      = 0
+	read__       = 0
+	to_read__    = 0
+
+	stat__ = IO_STATUS(fd)
+	IF (stat__ <> 0) THEN GOTO lbl_exit_rb; ENDIF
+
+	-- by default we remove as much as the caller specified ..
+	count__ = count
+
+	-- but maybe caller wants us to do a 'snapshot remove' (ie: all
+	-- bytes that are currently in the fd buffer)
+	IF (count__ = MAXINT) THEN
+		BYTES_AHEAD(fd, count__, stat__)
+		IF (stat__ <> 0) THEN GOTO lbl_exit_rb; ENDIF
+	ENDIF
+
+	-- if there are no bytes in 'src', then we'll skip the while
+
+	WHILE (read__ < count__) DO
+		to_read__ = (count__ - read__)
+		IF (to_read__ > CHUNK_SZ) THEN
+			to_read__ = CHUNK_SZ
+		ENDIF
+
+		-- TODO: what if 'to_read__ == 0'?
+
+		READ fd(buf__::to_read__)
+		stat__ = IO_STATUS(fd)
+		IF (stat__ <> 0) THEN GOTO lbl_exit_rb; ENDIF
+
+		read__ = read__ + to_read__
+	ENDWHILE
+
+	status = 0
+	GOTO lbl_ret_rb
+
+lbl_exit_rb::
+	status = stat__
+
+lbl_ret_rb::
+END rem_bytes
+
+
+
+
+ROUTINE move_bytes
+CONST
+	CHUNK_SZ     = 127
+VAR
+	stat__       : INTEGER
+	count__      : INTEGER
+	read__       : INTEGER
+	to_read__    : INTEGER
+	buf__        : STRING[128]
+BEGIN
+	stat__       = 0
+	count__      = 0
+	read__       = 0
+	to_read__    = 0
+
+	stat__ = IO_STATUS(src)
+	IF (stat__ <> 0) THEN GOTO lbl_exit_mb; ENDIF
+
+	stat__ = IO_STATUS(dst)
+	IF (stat__ <> 0) THEN GOTO lbl_exit_mb; ENDIF
+
+	-- by default we move as much as the caller specified ..
+	count__ = count
+
+	-- but maybe caller wants us to do a 'snapshot move'
+	IF (count__ = MAXINT) THEN
+		BYTES_AHEAD(src, count__, stat__)
+		IF (stat__ <> 0) THEN GOTO lbl_exit_mb; ENDIF
+	ENDIF
+
+	-- if there are no bytes in 'src', then we'll skip the while
+
+	WHILE (read__ < count__) DO
+		-- move as much as we need, but never more than CHUNK_SZ
+		to_read__ = (count__ - read__)
+		IF (to_read__ > CHUNK_SZ) THEN
+			to_read__ = CHUNK_SZ
+		ENDIF
+
+		READ src(buf__::to_read__)
+		stat__ = IO_STATUS(src)
+		IF (stat__ <> 0) THEN GOTO lbl_exit_mb; ENDIF
+
+		read__ = read__ + to_read__
+
+		WRITE dst(buf__::to_read__, CR)
+		stat__ = IO_STATUS(dst)
+		IF (stat__ <> 0) THEN GOTO lbl_exit_mb; ENDIF
+	ENDWHILE
+
+	status = 0
+	GOTO lbl_ret_mb
+
+lbl_exit_mb::
+	status = stat__
+
+lbl_ret_mb::
+END move_bytes

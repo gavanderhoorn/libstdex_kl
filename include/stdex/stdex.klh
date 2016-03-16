@@ -1,0 +1,68 @@
+
+-- Copyright (c) 2016, G.A. vd. Hoorn
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--     http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
+
+--------------------------------------------------------------------------------
+--
+-- libstdex routine prototypes
+--
+-- author: G.A. vd. Hoorn
+--
+--------------------------------------------------------------------------------
+
+
+
+
+--------------------------------------------------------------------------------
+--
+-- Removes the requested number of bytes from the given file descriptor.
+--
+-- If 'count' is set to 'MAXINT', all available bytes (at the time of
+-- invocation) will be removed.
+--
+-- Note: whether requesting to remove more bytes than present in the descriptor
+--       buffer will block or not is dependent on the configuration of 'fd'.
+--
+-- [in    ]  fd           : file descriptor
+-- [in    ]  count        : number of bytes to remove
+-- [   out]  status       : if not equal to zero, an error occured while trying
+--                          to remove the requested nr of bytes from the file
+--                          descriptor.
+--
+--------------------------------------------------------------------------------
+ROUTINE rem_bytes(fd : FILE; count : INTEGER; status : INTEGER) FROM libstdex
+
+
+
+
+--------------------------------------------------------------------------------
+--
+-- Moves the requested number of bytes from the source fd to the destination fd.
+--
+-- If 'count' is set to 'MAXINT', all available bytes (at the time of
+-- invocation) will be moved from 'src' to 'dst'.
+--
+-- Note: whether requesting to move more bytes than present in the descriptor
+--       buffer will block or not is dependent on the configuration of 'fd'.
+--
+-- [in    ]  src          : source file descriptor
+-- [in    ]  dst          : destination file descriptor
+-- [in    ]  count        : number of bytes to move
+-- [   out]  status       : if not equal to zero, an error occured while trying
+--                          to move the requested nr of bytes from the source
+--                          to the destination file descriptor.
+--
+--------------------------------------------------------------------------------
+ROUTINE move_bytes(src : FILE; dst : FILE; count : INTEGER; status : INTEGER) FROM libstdex
