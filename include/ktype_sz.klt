@@ -13,6 +13,9 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+%IFNDEF STDEX_KTYPE_SZ_KLT__
+%DEFINE STDEX_KTYPE_SZ_KLT__
+
 
 --------------------------------------------------------------------------------
 --
@@ -59,3 +62,6 @@ CONST
 	SZ_JPOS8     =  36
 	SZ_JPOS9     =  40
 	SZ_JPOS      =  40
+
+
+%ENDIF -- STDEX_KTYPE_SZ_KLT__

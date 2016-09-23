@@ -13,6 +13,9 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+%IFNDEF STDEX_STDEX_KLH__
+%DEFINE STDEX_STDEX_KLH__
+
 
 --------------------------------------------------------------------------------
 --
@@ -66,3 +69,6 @@ ROUTINE rem_bytes(fd : FILE; count : INTEGER; status : INTEGER) FROM libstdex
 --
 --------------------------------------------------------------------------------
 ROUTINE move_bytes(src : FILE; dst : FILE; count : INTEGER; status : INTEGER) FROM libstdex
+
+
+%ENDIF -- STDEX_STDEX_KLH__

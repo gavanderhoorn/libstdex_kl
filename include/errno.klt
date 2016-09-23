@@ -13,6 +13,9 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+%IFNDEF STDEX_ERRNO_KLT__
+%DEFINE STDEX_ERRNO_KLT__
+
 
 --------------------------------------------------------------------------------
 -- 
@@ -26,3 +29,6 @@ CONST
 	                       -- 'posix like'
 	EAGAIN       =    282
 	EWOULDBLOCK  = EAGAIN
+
+
+%ENDIF -- STDEX_ERRNO_KLT__
