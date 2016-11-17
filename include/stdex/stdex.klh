@@ -71,4 +71,28 @@ ROUTINE rem_bytes(fd : FILE; count : INTEGER; status : INTEGER) FROM libstdex
 ROUTINE move_bytes(src : FILE; dst : FILE; count : INTEGER; status : INTEGER) FROM libstdex
 
 
+
+
+--------------------------------------------------------------------------------
+--
+-- Sets all elements of the INTEGER array 'a' to zero (0).
+--
+-- [in-out]  a            : the array
+--
+--------------------------------------------------------------------------------
+ROUTINE bzeroi(a : ARRAY OF INTEGER) FROM libstdex
+
+
+
+
+--------------------------------------------------------------------------------
+--
+-- Sets all elements of the REAL array 'a' to zero (0.0).
+--
+-- [in-out]  a            : the array
+--
+--------------------------------------------------------------------------------
+ROUTINE bzeror(a : ARRAY OF REAL) FROM libstdex
+
+
 %ENDIF -- STDEX_STDEX_KLH__

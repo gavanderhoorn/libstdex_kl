@@ -184,3 +184,31 @@ lbl_exit_mb::
 
 lbl_ret_mb::
 END move_bytes
+
+
+
+
+ROUTINE bzeroi
+VAR
+	i__          : INTEGER
+	sz__         : INTEGER
+BEGIN
+	sz__ = ARRAY_LEN(a)
+	FOR i__ = 1 to sz__ DO
+		a[i__] = 0
+	ENDFOR
+END bzeroi
+
+
+
+
+ROUTINE bzeror
+VAR
+	i__          : INTEGER
+	sz__         : INTEGER
+BEGIN
+	sz__ = ARRAY_LEN(a)
+	FOR i__ = 1 to sz__ DO
+		a[i__] = 0.0
+	ENDFOR
+END bzeror
